@@ -10,22 +10,37 @@ import {
     ResponsiveContainer,
     Cell,
 } from 'recharts';
-import CustomToolTip from './CustomToolTip';
 
-const CustomBarChart = ({ data }) => {
+const CustomBarChart = ({ data = [], xKey = "name" }) => {
 
     // Function to alternate colors
     const getBarColor = (index) => {
         return index % 2 === 0 ? "#875cf5" : "#cfbefb"
     };
 
+    // const CustomTooltip = ({ active, payload }) => {
+    //     if (active && payload && payload.length) {
+    //         return (
+    //             <div className='bg-white shadow-md rounded-lg p-2 border border-gray-300'>
+    //                 <p className='text-xs font-semibold text-purple-800 mb-1 '>{payload[0].payload.category}</p>
+    //                 <p className='text-sm text-gray-600'>
+    //                     Amount: <span className='text-sm font-medium text-gray-900'>${payload[0].payload.amount}</span>
+    //                 </p>
+    //             </div>
+    //         );
+    //     }
+    //     return null;
+    // };
+
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
+            const point = payload[0].payload || {};
+            const label = point[xKey] || point.name || point.category || "";
             return (
                 <div className='bg-white shadow-md rounded-lg p-2 border border-gray-300'>
-                    <p className='text-xs font-semibold text-purple-800 mb-1 '>{payload[0].payload.category}</p>
+                    <p className='text-xs font-semibold text-purple-800 mb-1 '>{label}</p>
                     <p className='text-sm text-gray-600'>
-                        Amount: <span className='text-sm font-medium text-gray-900'>${payload[0].payload.amount}</span>
+                        Amount: <span className='text-sm font-medium text-gray-900'>${point.amount}</span>
                     </p>
                 </div>
             );
@@ -39,8 +54,8 @@ const CustomBarChart = ({ data }) => {
         <BarChart data={data}>
             <CartesianGrid stroke='none' />
 
-            <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#555' }} stroke='none'  />
-            <YAxis tick={{ fontSize: 12, fill: '@555' }} stroke='none' />
+            <XAxis dataKey={xKey} tick={{ fontSize: 12, fill: '#555' }} stroke='none'  />
+            <YAxis tick={{ fontSize: 12, fill: '#555' }} stroke='none' />
 
             <Tooltip content={CustomTooltip}/>
             <Bar

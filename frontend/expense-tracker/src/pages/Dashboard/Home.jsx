@@ -34,6 +34,10 @@ const Home = () => {
         `${API_PATHS.DASHBOARD.GET_DATA}`
       );
 
+      console.log('API Response:', response.data); // Add this
+      console.log('Recent Transactions:', response.data?.recentTransactions); // Add this
+      console.log('Last 30 Days Expenses:', response.data?.last30DaysExpenses); // Add this
+
       if (response.data) {
         setDashboardData(response.data);
       }
@@ -46,11 +50,11 @@ const Home = () => {
 
   useEffect(() => {
     fetchDashboardData();
-    return () => {};
-  },[]);
+  }, []);
 
   return (
     <DashboardLayout activeMenu="Dashboard">
+      {console.log('dashboardData:', dashboardData)} {/* Add this */}
       <div className='my-5 mx-auto'>
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
             <InfoCard 
@@ -93,11 +97,11 @@ const Home = () => {
           />
 
           <Last30DaysExpenses
-              data={dashboardData?.last30DaysExpenses.transations || []}
+              data={dashboardData?.last30DaysExpenses?.transactions || []}
           />
 
           <RecentIncomeWithChart 
-            data={dashboardData?.last60DaysIncome?.transactions.slice(0,4) || []}
+            data={dashboardData?.last60DaysIncome?.transactions?.slice(0,4) || []}
             totalIncome={dashboardData?.totalIncome || 0}
           />
 
